@@ -490,8 +490,10 @@ class Heist(commands.Cog):
                                "will begin in {1} seconds. Type {2}heist play to join their "
                                "{3}.".format(escape(author.display_name, formatting=True), wait_time, ctx.prefix, t_crew, t_heist))
             
+            await msg.add_reaction("✅")
+            
             def check(reaction, user):
-                return reaction.emoji == "✅" and reaction.message.id == msg.id
+                return str(reaction.emoji) == "✅" and reaction.message.id == msg.id
             
             timeout = wait_time
             while True:
