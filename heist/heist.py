@@ -486,10 +486,27 @@ class Heist(commands.Cog):
             config["Planned"] = True
             await self.thief.config.guild(guild).Config.set(config)
             crew = await self.thief.add_crew_member(author)
-            await ctx.send("A {4} is being planned by {0}\nThe {4} "
+            msg = await ctx.send("A {4} is being planned by {0}\nThe {4} "
                                "will begin in {1} seconds. Type {2}heist play to join their "
                                "{3}.".format(escape(author.display_name, formatting=True), wait_time, ctx.prefix, t_crew, t_heist))
-            await asyncio.sleep(wait_time)
+            
+            def check(reaction, user):
+                return reaction.emoji == "✅" and reaction.message.id == msg.id
+            
+            timeout = wait_time
+            while True:
+                t = time.time()
+                try:
+                    _, joiner = await self.bot.wait_for("reaction_add", check=check, timeout=timeout)
+                except asyncio.TimeoutError:
+                    break
+
+                timeout -= round(time.time() - time.time())
+                await bank.withdraw_credits(joiner, cost)
+                crew = await self.thief.add_crew_member(joiner)
+                crew_size = len(crew)
+                await ctx.send("{0} has joined the {2}.\nThe {2} now has {1} "
+                                   "members.".format(escape(joiner.display_name, formatting=True), crew_size, t_crew))
             
             crew = await self.thief.config.guild(guild).Crew()
 
@@ -500,12 +517,6 @@ class Heist(commands.Cog):
             else:
                 await self.heist_game(ctx, guild, t_heist, t_crew, t_vault)
 
-        else:
-            await bank.withdraw_credits(author, cost)
-            crew = await self.thief.add_crew_member(author)
-            crew_size = len(crew)
-            await ctx.send("{0} has joined the {2}.\nThe {2} now has {1} "
-                               "members.".format(escape(author.display_name, formatting=True), crew_size, t_crew))
 
     async def heist_game(self, ctx, guild, t_heist, t_crew, t_vault):
         config = await self.thief.get_guild_settings(guild)
