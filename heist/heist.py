@@ -510,7 +510,7 @@ class Heist(commands.Cog):
                 timeout -= round(time.time() - time.time())
                 await bank.withdraw_credits(joiner, cost)
                 crew = await self.thief.add_crew_member(joiner)
-                joiners = "\n".join([guild.get_member(int(x)),display_name for x in crew])
+                joiners = "\n".join([guild.get_member(int(x)).display_name for x in crew])
                 crew_size = len(crew)
                 target = self.thief.heist_target(targets, guild, crew)
                 
