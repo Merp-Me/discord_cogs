@@ -486,9 +486,13 @@ class Heist(commands.Cog):
             config["Planned"] = True
             await self.thief.config.guild(guild).Config.set(config)
             crew = await self.thief.add_crew_member(author)
-            msg = await ctx.send("A {4} is being planned by {0}\nThe {4} "
-                               "will begin in {1} seconds. Type {2}heist play to join their "
-                               "{3}.".format(escape(author.display_name, formatting=True), wait_time, ctx.prefix, t_crew, t_heist))
+            targets = await self.thief.get_guild_targets(guild)
+            
+            embed = discord.Embed(title="Heist Planned", color=await ctx.embed_color())
+            embed.description = ("A {3} is being planned by {0}\nThe {3} "
+                               "will begin in {1} seconds. React with ✅ to join their {2}.\n\n"
+                               "Current {2}:\n{0}.".format(escape(author.display_name, formatting=True), wait_time, t_crew, t_heist))
+            msg = await ctx.send(embed=embed)
             
             await msg.add_reaction("✅")
             
@@ -506,9 +510,15 @@ class Heist(commands.Cog):
                 timeout -= round(time.time() - time.time())
                 await bank.withdraw_credits(joiner, cost)
                 crew = await self.thief.add_crew_member(joiner)
+                joiners = "\n".join([guild.get_member(int(x)) for x in crew])
                 crew_size = len(crew)
-                await ctx.send("{0} has joined the {2}.\nThe {2} now has {1} "
-                                   "members.".format(escape(joiner.display_name, formatting=True), crew_size, t_crew))
+                target = self.thief.heist_target(targets, guild, crew)
+                
+                embed = discord.Embed(title=f"Heist - Targeting {target}", color=await ctx.embed_color())
+                embed.description = ("A {3} is being planned by {0}\nThe {3} "
+                                "will begin in {1} seconds. React with ✅ to join their {2}.\n\n"
+                                "Current {2}:\n{4}.".format(escape(author.display_name, formatting=True), wait_time, t_crew, t_heist, joiners))
+                await msg.edit(embed=embed)
             
             crew = await self.thief.config.guild(guild).Crew()
 
