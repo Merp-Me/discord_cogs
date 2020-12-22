@@ -497,7 +497,7 @@ class Heist(commands.Cog):
             await msg.add_reaction("✅")
             
             def check(reaction, user):
-                return str(reaction.emoji) == "✅" and reaction.message.id == msg.id and not user.bot and str(user.id) not in crew
+                return str(reaction.emoji) == "✅" and reaction.message.id == msg.id and not user.bot and user.id != ctx.author.id
             
             timeout = wait_time
             while True:
