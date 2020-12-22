@@ -493,7 +493,7 @@ class Heist(commands.Cog):
             await msg.add_reaction("✅")
             
             def check(reaction, user):
-                return str(reaction.emoji) == "✅" and reaction.message.id == msg.id
+                return str(reaction.emoji) == "✅" and reaction.message.id == msg.id and not user.bot
             
             timeout = wait_time
             while True:
