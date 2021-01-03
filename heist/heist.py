@@ -507,7 +507,7 @@ class Heist(commands.Cog):
                 except asyncio.TimeoutError:
                     break
 
-                timeout -= round(time.time() - time.time())
+                timeout -= time.time() - t
                 await bank.withdraw_credits(joiner, cost)
                 crew = await self.thief.add_crew_member(joiner)
                 joiners = "\n".join([guild.get_member(int(x)).display_name for x in crew])
