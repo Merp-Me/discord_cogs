@@ -528,6 +528,8 @@ class Heist(commands.Cog):
                 await self.thief.reset_heist(guild)
             else:
                 await self.heist_game(ctx, guild, t_heist, t_crew, t_vault)
+        else:
+            return await ctx.send("A Heist is already being planned!")
 
 
     async def heist_game(self, ctx, guild, t_heist, t_crew, t_vault):
