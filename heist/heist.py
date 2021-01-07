@@ -549,18 +549,23 @@ class Heist(commands.Cog):
         await self.thief.show_results(ctx, guild, results)
         curcrew = await self.thief.get_guild_crew(guild)
         if len(curcrew) != 0:
-            players = [guild.get_member(int(x)) for x in curcrew]
+            players = [guild.get_member(int(x)).mention for x in curcrew]
             data = await self.thief.calculate_credits(guild, players, target)
             headers = ["Players", "Credits Obtained", "Bonuses", "Total"]
-            t = tabulate(data, headers=headers)
-            msg = ("The credits collected from the {} was split among the winners:\n```"
-                   "C\n{}```".format(t_vault, t))
+            
+            
+            fmt = f"**Target was**: {target}\n\n**Rewards Received:**\n"
+            for i, p in enumerate(data):
+                fmt += f"• {players[i]} - 🍪{p[1]}(+{p[2]})"
         else:
-            msg = "No one made it out safe."
+            fmt = "No one made it out safe."
+
         config["Alert"] = int(time.perf_counter())
+        
+        embed = discord.Embed(title="Heist is over...", description=fmt, footer="Do `/hp` to start another game of heist!", color=0xFFCD69)
         await self.thief.config.guild(guild).Config.set(config)
         await self.thief.reset_heist(guild)
-        await ctx.send(msg)
+        await ctx.send(embed=embed)
 
     @heist.command(name="listthemes")
     @checks.admin_or_permissions(manage_guild=True)
