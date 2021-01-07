@@ -512,7 +512,7 @@ class Heist(commands.Cog):
                 crew = await self.thief.add_crew_member(joiner)
                 joiners = "\n".join([guild.get_member(int(x)).display_name for x in crew])
                 crew_size = len(crew)
-                target = self.thief.heist_target(targets, guild, crew)
+                target = self.thief.heist_target(targets, guild, crew_size)
                 
                 embed = discord.Embed(title=f"Heist - Targeting {target}", color=await ctx.embed_color())
                 embed.description = ("A {3} is being planned by {0}\nThe {3} "
