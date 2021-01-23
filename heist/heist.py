@@ -527,7 +527,10 @@ class Heist(commands.Cog):
                                    "{} has been cancelled.".format(t_crew, t_heist))
                 await self.thief.reset_heist(guild)
             else:
-                await self.heist_game(ctx, guild, t_heist, t_crew, t_vault)
+                try:
+                    await self.heist_game(ctx, guild, t_heist, t_crew, t_vault)
+                except Exception as e:
+                    return await ctx.send(f"Error:```\n{e}\n```")
         else:
             return await ctx.send("A Heist is already being planned!")
 
