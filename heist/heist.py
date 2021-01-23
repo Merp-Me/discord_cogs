@@ -552,14 +552,14 @@ class Heist(commands.Cog):
         await self.thief.show_results(ctx, guild, results)
         curcrew = await self.thief.get_guild_crew(guild)
         if len(curcrew) != 0:
-            players = [guild.get_member(int(x)).mention for x in curcrew]
+            players = [guild.get_member(int(x)) for x in curcrew]
             data = await self.thief.calculate_credits(guild, players, target)
             headers = ["Players", "Credits Obtained", "Bonuses", "Total"]
             
             
             fmt = f"**Target was**: {target}\n\n**Rewards Received:**\n"
             for i, p in enumerate(data):
-                fmt += f"• {players[i]} - 🍪{p[1]}(+{p[2]})"
+                fmt += f"• {players[i].mention} - 🍪{p[1]}(+{p[2]})"
         else:
             fmt = "No one made it out safe."
 
