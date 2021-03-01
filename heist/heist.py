@@ -559,7 +559,7 @@ class Heist(commands.Cog):
             
             fmt = f"**Target was**: {target}\n\n**Rewards Received:**\n"
             for i, p in enumerate(data):
-                fmt += f"• {players[i].mention} - 🍪{p[1]}(+{p[2]})"
+                fmt += f"• {players[i].mention} - 🥚{p[1]}(+{p[2]})"
         else:
             fmt = "No one made it out safe."
 
