@@ -340,9 +340,9 @@ class Heist(commands.Cog):
                        config["Sentence"], config["Death"]]
         timers = list(map(self.thief.time_format, time_values))
         description = ["Heist Version {}".format(self.version), "Theme: {}".format(theme)]
-        footer = "Heist was developed by Redjumpman for Red Bot v2.\nUpdated to v3 by Malarne"
+        footer = "Arkonomy"
 
-        embed = discord.Embed(colour=0x0066FF, description="\n".join(description))
+        embed = discord.Embed(colour=0xe83842, description="\n".join(description))
         embed.title = "{} Heist Settings".format(guild.name)
         embed.add_field(name="Heist Cost", value=config["Cost"])
         embed.add_field(name="Base {} Cost".format(t_bail), value=config["Bail"])
@@ -440,7 +440,7 @@ class Heist(commands.Cog):
 
         rank = self.thief.criminal_level(await self.thief.get_member_crimlevel(author))
 
-        embed = discord.Embed(colour=0x0066FF, description=rank)
+        embed = discord.Embed(colour=0xe83842, description=rank)
         embed.title = author.name
         embed.set_thumbnail(url=avatar)
         embed.add_field(name="Status", value=await self.thief.get_member_status(author))
